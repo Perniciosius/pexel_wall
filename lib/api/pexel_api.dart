@@ -5,7 +5,7 @@ import 'package:pexel_wall/api/http_exception.dart';
 import 'package:pexel_wall/models/pexel_image.dart';
 
 class PexelApi {
-  final httpClient = http.Client();
+  final _httpClient = http.Client();
 
   Future<List<PexelImage>> getCuratedImages({
     required int page,
@@ -21,7 +21,7 @@ class PexelApi {
       },
     );
 
-    final res = await httpClient.get(uri);
+    final res = await _httpClient.get(uri);
     if (res.statusCode != 200) {
       throw HTTPException(
         code: res.statusCode,
@@ -49,7 +49,7 @@ class PexelApi {
       },
     );
 
-    final res = await httpClient.get(uri);
+    final res = await _httpClient.get(uri);
     if (res.statusCode != 200) {
       throw HTTPException(
         code: res.statusCode,
@@ -68,7 +68,7 @@ class PexelApi {
       path: '/v1/search/$id',
     );
 
-    final res = await httpClient.get(uri);
+    final res = await _httpClient.get(uri);
     if (res.statusCode != 200) {
       throw HTTPException(
         code: res.statusCode,
