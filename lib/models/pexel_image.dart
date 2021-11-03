@@ -26,7 +26,7 @@ class PexelImage {
     required this.src,
   });
 
-  factory PexelImage.fromJson(Map<String, Object> json) => PexelImage(
+  factory PexelImage.fromJson(Map<String, dynamic> json) => PexelImage(
         id: json["id"] as int,
         width: json["width"] as int,
         height: json["height"] as int,
@@ -36,10 +36,20 @@ class PexelImage {
         photographerUrl: json["photographer_url"] as String,
         averageColor: Color(
           int.parse(
-            (json["avg_color"] as String).replaceFirst('#', '0xFF'),
+            (json["avg_color"] as String).replaceFirst('#', 'FF'),
+            radix: 16,
           ),
         ),
-        src: json["src"] as Map<String, String>,
+        src: {
+          "original": json["src"]["original"],
+          "large2x": json["src"]["large2x"],
+          "large": json["src"]["large"],
+          "medium": json["src"]["medium"],
+          "small": json["src"]["small"],
+          "portrait": json["src"]["portrait"],
+          "landscape": json["src"]["tiny"],
+          "tiny": json["src"]["tiny"],
+        },
       );
 
   static List<PexelImage> getImageListFromJson(Map<String, dynamic> json) {
