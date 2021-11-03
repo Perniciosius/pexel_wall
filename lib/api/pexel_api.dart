@@ -18,8 +18,8 @@ class PexelApi {
       host: 'api.pexels.com',
       path: '/v1/curated/',
       queryParameters: {
-        "page": page,
-        "per_page": perPage,
+        "page": page.toString(),
+        "per_page": perPage.toString(),
       },
     );
 
@@ -45,8 +45,8 @@ class PexelApi {
       host: 'api.pexels.com',
       path: '/v1/search/',
       queryParameters: {
-        "page": page,
-        "per_page": perPage,
+        "page": page.toString(),
+        "per_page": perPage.toString(),
         "query": tags,
       },
     );
