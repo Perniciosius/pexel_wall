@@ -18,9 +18,18 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) => InternetProvider()),
-          ChangeNotifierProvider(create: (_) => CuratedImageProvider()),
-          ChangeNotifierProvider(create: (_) => LikedImageProvider()),
+          ChangeNotifierProvider(
+            create: (_) => InternetProvider(),
+            lazy: true,
+          ),
+          ChangeNotifierProvider(
+            create: (_) => CuratedImageProvider(),
+            lazy: true,
+          ),
+          ChangeNotifierProvider(
+            create: (_) => LikedImageProvider(),
+            lazy: true,
+          ),
         ],
         child: const ExplorePage(),
       ),
