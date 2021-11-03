@@ -11,7 +11,9 @@ class CuratedImageProvider with ChangeNotifier {
   CuratedImageProvider()
       : _pexelApi = PexelApi(),
         images = [],
-        _isLoading = true;
+        _isLoading = true {
+    getImages();
+  }
 
   void getImages({int page = 1, int perPage = 20}) async {
     _isLoading = true;
@@ -41,10 +43,12 @@ class SearchImageProvider with ChangeNotifier {
   bool _isLoading;
   bool get isLoading => _isLoading;
 
-  SearchImageProvider()
+  SearchImageProvider(String tags)
       : _pexelApi = PexelApi(),
         images = [],
-        _isLoading = true;
+        _isLoading = true {
+    searchImages(tags);
+  }
 
   void searchImages(String tags, {int page = 1, int perPage = 20}) async {
     _isLoading = true;
@@ -71,7 +75,9 @@ class LikedImageProvider with ChangeNotifier {
       : _pexelApi = PexelApi(),
         images = [],
         _isLoading = true,
-        _likedImageIds = [];
+        _likedImageIds = [] {
+    getLikedImages();
+  }
 
   void getLikedImages() async {
     _isLoading = true;
