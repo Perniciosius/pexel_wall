@@ -13,10 +13,7 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      themeMode: ThemeMode.system,
-      debugShowCheckedModeBanner: false,
-      home: MultiProvider(
+    return MultiProvider(
         providers: [
           ChangeNotifierProvider(
             create: (_) => InternetProvider(),
@@ -31,7 +28,10 @@ class App extends StatelessWidget {
             lazy: true,
           ),
         ],
-        child: const ExplorePage(),
+      child: const MaterialApp(
+        themeMode: ThemeMode.system,
+        debugShowCheckedModeBanner: false,
+        home: ExplorePage(),
       ),
     );
   }
