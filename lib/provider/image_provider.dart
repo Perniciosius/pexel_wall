@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pexel_wall/api/pexel_api.dart';
 import 'package:pexel_wall/models/pexel_image.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CuratedImageProvider with ChangeNotifier {
   final List<PexelImage> images;
@@ -76,7 +77,25 @@ class LikedImageProvider with ChangeNotifier {
         images = [],
         _isLoading = true,
         _likedImageIds = [] {
+    init();
+  }
+
+  void init() async {
+    final prefs = await SharedPreferences.getInstance();
+    _likedImageIds.addAll(prefs
+            .getStringList("LIKED_IMAGES")
+            ?.map((e) => int.parse(e))
+            .toList() ??
+        []);
     getLikedImages();
+  }
+
+  void updateSharedPreference() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setStringList(
+      "LIKED_IMAGES",
+      _likedImageIds.map((e) => e.toString()).toList(),
+    );
   }
 
   void getLikedImages() async {
@@ -94,11 +113,13 @@ class LikedImageProvider with ChangeNotifier {
     _likedImageIds.add(image.id);
     images.add(image);
     notifyListeners();
+    updateSharedPreference();
   }
 
   void unlikeImage(int id) {
     _likedImageIds.removeWhere((element) => element == id);
     images.removeWhere((element) => element.id == id);
     notifyListeners();
+    updateSharedPreference();
   }
 }

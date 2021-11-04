@@ -20,6 +20,7 @@ dependencies:
   flutter_staggered_grid_view:
   cached_network_image:
   connectivity_plus:
+  shared_preferences:
 
 dev_dependencies:
   flutter_test:
