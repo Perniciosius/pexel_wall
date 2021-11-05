@@ -4,54 +4,57 @@ import 'package:pexel_wall/models/pexel_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CuratedImageProvider with ChangeNotifier {
-  final List<PexelImage> images;
+  final List<PexelImage> _images;
+  List<PexelImage> get images => _images;
   final PexelApi _pexelApi;
   bool _isLoading;
   bool get isLoading => _isLoading;
+  int _page;
 
   CuratedImageProvider()
       : _pexelApi = PexelApi(),
-        images = [],
-        _isLoading = true {
-    getImages();
+        _images = [],
+        _isLoading = true,
+        _page = 1 {
+    _getImages();
   }
 
-  void getImages({int page = 1, int perPage = 20}) async {
+  void _getImages({int page = 1, int perPage = 20}) async {
     _isLoading = true;
     notifyListeners();
     final images = await _pexelApi.getCuratedImages(
       page: page,
       perPage: perPage,
     );
-    this.images.addAll(images);
+    _images.addAll(images);
     _isLoading = false;
     notifyListeners();
   }
 
-  void loadImageById(int id) async {
-    _isLoading = true;
-    notifyListeners();
-    final image = await _pexelApi.getImageById(id);
-    images.add(image);
-    _isLoading = false;
-    notifyListeners();
+  void loadMore() {
+    _getImages(page: ++_page);
   }
 }
 
 class SearchImageProvider with ChangeNotifier {
-  final List<PexelImage> images;
+  final List<PexelImage> _images;
+  List<PexelImage> get images => _images;
   final PexelApi _pexelApi;
   bool _isLoading;
   bool get isLoading => _isLoading;
+  int _page;
+  final String _tags;
 
   SearchImageProvider(String tags)
       : _pexelApi = PexelApi(),
-        images = [],
-        _isLoading = true {
-    searchImages(tags);
+        _images = [],
+        _isLoading = true,
+        _page = 1,
+        _tags = tags {
+    _searchImages(tags);
   }
 
-  void searchImages(String tags, {int page = 1, int perPage = 20}) async {
+  void _searchImages(String tags, {int page = 1, int perPage = 20}) async {
     _isLoading = true;
     notifyListeners();
     final images = await _pexelApi.getImagesByTag(
@@ -60,13 +63,18 @@ class SearchImageProvider with ChangeNotifier {
       perPage: perPage,
     );
     _isLoading = false;
-    this.images.addAll(images);
+    _images.addAll(images);
     notifyListeners();
+  }
+
+  void loadMore() {
+    _searchImages(_tags, page: ++_page);
   }
 }
 
 class LikedImageProvider with ChangeNotifier {
-  final List<PexelImage> images;
+  final List<PexelImage> _images;
+  List<PexelImage> get images => _images;
   final PexelApi _pexelApi;
   bool _isLoading;
   bool get isLoading => _isLoading;
@@ -74,7 +82,7 @@ class LikedImageProvider with ChangeNotifier {
 
   LikedImageProvider()
       : _pexelApi = PexelApi(),
-        images = [],
+        _images = [],
         _isLoading = true,
         _likedImageIds = [] {
     init();
@@ -87,10 +95,10 @@ class LikedImageProvider with ChangeNotifier {
             ?.map((e) => int.parse(e))
             .toList() ??
         []);
-    getLikedImages();
+    _getLikedImages();
   }
 
-  void updateSharedPreference() async {
+  void _updateSharedPreference() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setStringList(
       "LIKED_IMAGES",
@@ -98,12 +106,12 @@ class LikedImageProvider with ChangeNotifier {
     );
   }
 
-  void getLikedImages() async {
+  void _getLikedImages() async {
     _isLoading = true;
     notifyListeners();
     for (final id in _likedImageIds) {
       final image = await _pexelApi.getImageById(id);
-      images.add(image);
+      _images.add(image);
     }
     _isLoading = false;
     notifyListeners();
@@ -111,15 +119,15 @@ class LikedImageProvider with ChangeNotifier {
 
   void likeImage(PexelImage image) {
     _likedImageIds.add(image.id);
-    images.add(image);
+    _images.add(image);
     notifyListeners();
-    updateSharedPreference();
+    _updateSharedPreference();
   }
 
   void unlikeImage(int id) {
     _likedImageIds.removeWhere((element) => element == id);
-    images.removeWhere((element) => element.id == id);
+    _images.removeWhere((element) => element.id == id);
     notifyListeners();
-    updateSharedPreference();
+    _updateSharedPreference();
   }
 }
