@@ -23,8 +23,11 @@ Consumer<CuratedImageProvider>(
         },
       ),
 ```
+### Possible keys for src: <br>
+![image](https://user-images.githubusercontent.com/45752299/140512615-fae37ad6-4a8c-48df-a74a-54d3b290a633.png)
 
-Initially 20 images will be loaded. To load more images, call ```provider.loadMore()```.
+
+### Initially 20 images will be loaded. To load more images, call ```provider.loadMore()```.
 
 
 # Getting list of liked images
