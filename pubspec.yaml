@@ -15,12 +15,15 @@ dependencies:
   cupertino_icons: ^1.0.2
   http:
   provider:
-  path_provider:
   google_fonts:
   flutter_staggered_grid_view:
   cached_network_image:
   connectivity_plus:
   shared_preferences:
+  extended_image:
+  url_launcher:
+  flutter_cache_manager:
+  permission_handler:
 
 dev_dependencies:
   flutter_test:
